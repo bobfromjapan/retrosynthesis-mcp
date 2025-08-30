@@ -13,7 +13,6 @@ This project implements a Streamable HTTP MCP server for retrosynthesis using Fa
 2.  **Install dependencies:**
     ```bash
     uv pip install -e .
-    uv add "mcp[cli]"
     ```
 
 3.  **Download AiZynthFinder models and data:**
@@ -28,20 +27,65 @@ This project implements a Streamable HTTP MCP server for retrosynthesis using Fa
 To run the server, use uvicorn:
 
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8000
+uv run uvicorn src.main:app --host 0.0.0.0 --port 8000
 ```
 
-## API Endpoints
+## 動作イメージ
 
-*   **GET /**: Basic health check.
-    Returns: `{"message": "Retrosynthesis MCP Server is running!"}`
+VSCodeで当該mcp serverを指定し、実行すると次のような結果が得られます。
 
-*   **POST /retrosynthesis**: Perform retrosynthesis for a given SMILES string.
-    Request Body (JSON):
-    ```json
-    {
-        "smiles": "CCO"
-    }
-    ```
-    Returns: A JSON object containing a list of routes or a message indicating no routes were found.
+```json
+{
+	"servers": {
+		"retrosynthesis-mcp": {
+			"url": "http://localhost:8000/mcp-server/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
+```
 
+![動作イメージ](img/vscode.png)
+
+## Google Cloud Runへのデプロイ
+
+### 1. Dockerイメージのビルド
+
+以下のコマンドでDockerイメージをビルドします。`[PROJECT_ID]`と`[IMAGE_NAME]`はご自身の環境に合わせて変更してください。
+
+```bash
+# Google CloudプロジェクトIDとイメージ名を設定
+export PROJECT_ID="mishima-fastapi-demo"
+export IMAGE_NAME="retrosynthesis-mcp"
+export REGION="asia-northeast1" # 例: 東京リージョン
+
+# Dockerイメージをビルド
+docker build -t ${REGION}-docker.pkg.dev/${PROJECT_ID}/mishima-mcp-sample/${IMAGE_NAME} .
+```
+
+### 2. Artifact RegistryへのPush
+
+gcloud CLIを使用して、ビルドしたイメージをArtifact Registryにプッシュします。
+
+```bash
+# gcloudでDocker認証を設定
+gcloud auth configure-docker ${REGION}-docker.pkg.dev
+
+# イメージをArtifact Registryにプッシュ
+docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/mishima-mcp-sample/${IMAGE_NAME}
+```
+
+### 3. Cloud Runへのデプロイ
+
+最後に、プッシュしたイメージをCloud Runにデプロイします。
+
+```bash
+gcloud run deploy ${IMAGE_NAME} \
+  --image ${REGION}-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/${IMAGE_NAME} \
+  --platform managed \
+  --region ${REGION} \
+  --allow-unauthenticated \
+  --memory 8Gi \
+  --cpu 2
+```
