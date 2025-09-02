@@ -1,39 +1,59 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from mcp.server.fastmcp import FastMCP
 import os
 import logging
 import subprocess
 import pandas as pd
 from aizynthfinder.aizynthfinder import AiZynthFinder
+import rdkit
 # Setup logging
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
 mcp = FastMCP("RetroSynthesisMCP")
-filename = "data/config.yml"
-finder = AiZynthFinder(configfile=filename)
-finder.stock.select("zinc")
-finder.expansion_policy.select("uspto")
-finder.filter_policy.select("uspto")
+
 # Pydantic model for the request body
 class RetrosynthesisRequest(BaseModel):
     smiles: str
+    
+    @validator('smiles')
+    def is_valid_smiles(cls, v):
+        try:
+            mol = rdkit.Chem.MolFromSmiles(v)
+            if mol is None:
+                raise ValueError("Invalid SMILES string")
+            return v
+        except Exception as e:
+            raise ValueError("Invalid SMILES string") from e
 
 
 @mcp.tool()
-def retrosynthesis(smiles: str):
+async def retrosynthesis(smiles: str):
     """
     SMILESを受け取り、逆合成解析を行い結果をJson形式で返すツールです。
+    Args:
+        smiles (str): 解析対象のSMILES文字列
+    Returns:
+        dict: 逆合成解析の結果を含むJSON形式の辞書
+          - message (str): 処理結果のメッセージ
+          - stats (dict): 逆合成解析の統計情報
+          - route (dict): 最もスコアの高かった逆合成経路の情報
     """
+    finder = AiZynthFinder(configfile="data/config.yml")
+    finder.stock.select("zinc")
+    finder.expansion_policy.select("uspto")
+    finder.filter_policy.select("uspto")
     try:
         finder.target_smiles = smiles
         finder.tree_search()
         finder.build_routes()
         stats = finder.extract_statistics()
+        route = finder.routes.reaction_trees[0].to_json()
+
         if stats:
             logger.info("Retrosynthesis completed successfully.")
-            return {"message": "Retrosynthesis completed successfully", "stats": stats}
+            return {"message": "Retrosynthesis completed successfully", "stats": stats, "route": route}
         else:
             logger.info("No routes found.")
             return {"message": "No routes found"}
