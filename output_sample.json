@@ -1,0 +1,31 @@
+{
+  "message": "Retrosynthesis completed successfully",
+  "stats": {
+    "target": "CC1(C)S[C@@H]2[C@H](NC(=O)CCC[C@@H](N)C(=O)O)C(=O)N2[C@H]1C(=O)O",
+    "search_time": 10.574086666107178,
+    "first_solution_time": 1.9153919219970703,
+    "first_solution_iteration": 1,
+    "number_of_nodes": 595,
+    "max_transforms": 6,
+    "max_children": 27,
+    "number_of_routes": 148,
+    "number_of_solved_routes": 24,
+    "top_score": 0.994039853898894,
+    "is_solved": true,
+    "number_of_steps": 2,
+    "number_of_precursors": 3,
+    "number_of_precursors_in_stock": 3,
+    "precursors_in_stock": "CC1(C)S[C@@H]2[C@H](N)C(=O)N2[C@H]1C(=O)O, N[C@H](CCCC(=O)O)C(=O)O, O=S(Cl)Cl",
+    "precursors_not_in_stock": "",
+    "precursors_availability": "zinc;zinc;zinc",
+    "policy_used_counts": {
+      "uspto": 594
+    },
+    "profiling": {
+      "expansion_calls": 448,
+      "reactants_generations": 1440,
+      "iterations": 100
+    }
+  },
+  "route": "{\n  \"type\": \"mol\",\n  \"hide\": false,\n  \"smiles\": \"CC1(C)S[C@@H]2[C@H](NC(=O)CCC[C@@H](N)C(=O)O)C(=O)N2[C@H]1C(=O)O\",\n  \"is_chemical\": true,\n  \"in_stock\": false,\n  \"children\": [\n    {\n      \"type\": \"reaction\",\n      \"hide\": false,\n      \"smiles\": \"[C:1]([CH3:2])(=[O:3])[N:8][CH2:7][C:5]([NH2:4])=[O:6]>>Cl[C:1]([CH3:2])=[O:3].[NH2:4][C:5](=[O:6])[CH2:7][N:8]\",\n      \"is_reaction\": true,\n      \"metadata\": {\n        \"template_hash\": \"0ba0755dee2310a50cacce552f00ae8784481e1ec4a0f42b3f8d2b5fea51e446\",\n        \"classification\": \"0.0 Unrecognized\",\n        \"library_occurence\": 329,\n        \"policy_probability\": 0.0026000000070780516,\n        \"policy_probability_rank\": 14,\n        \"policy_name\": \"uspto\",\n        \"template_code\": 1910,\n        \"template\": \"[#7:4]-[C:5](=[O;D1;H0:6])-[C:7]-[NH;D2;+0:8]-[C;H0;D3;+0:1](-[C:2])=[O;D1;H0:3]>>Cl-[C;H0;D3;+0:1](-[C:2])=[O;D1;H0:3].[#7:4]-[C:5](=[O;D1;H0:6])-[C:7]-[NH2;D1;+0:8]\",\n        \"mapped_reaction_smiles\": \"[CH3:1][C:2]1([CH3:3])[S:4][C@@H:5]2[C@H:6]([NH:7][C:8](=[O:9])[CH2:10][CH2:11][CH2:12][C@@H:13]([NH2:14])[C:15](=[O:16])[OH:17])[C:18](=[O:19])[N:20]2[C@H:21]1[C:22](=[O:23])[OH:24]>>[C:8](=[O:9])([CH2:10][CH2:11][CH2:12][C@@H:13]([NH2:14])[C:15](=[O:16])[OH:17])[Cl:25].[CH3:1][C:2]1([CH3:3])[S:4][C@@H:5]2[C@H:6]([NH2:7])[C:18](=[O:19])[N:20]2[C@H:21]1[C:22](=[O:23])[OH:24]\"\n      },\n      \"children\": [\n        {\n          \"type\": \"mol\",\n          \"hide\": false,\n          \"smiles\": \"N[C@H](CCCC(=O)Cl)C(=O)O\",\n          \"is_chemical\": true,\n          \"in_stock\": false,\n          \"children\": [\n            {\n              \"type\": \"reaction\",\n              \"hide\": false,\n              \"smiles\": \"[Cl:1][C:2]([CH3:3])=[O:4]>>O=S(Cl)[Cl:1].O[C:2]([CH3:3])=[O:4]\",\n              \"is_reaction\": true,\n              \"metadata\": {\n                \"template_hash\": \"19f2a0f4c6a46a956748171b40376b6f742843423bcde2abbd8b3a6cf6b0a7b9\",\n                \"classification\": \"0.0 Unrecognized\",\n                \"library_occurence\": 1863,\n                \"policy_probability\": 0.2980000078678131,\n                \"policy_probability_rank\": 0,\n                \"policy_name\": \"uspto\",\n                \"template_code\": 4355,\n                \"template\": \"[C:3]-[C;H0;D3;+0:2](-[Cl;H0;D1;+0:1])=[O;D1;H0:4]>>Cl-S(=O)-[Cl;H0;D1;+0:1].O-[C;H0;D3;+0:2](-[C:3])=[O;D1;H0:4]\",\n                \"mapped_reaction_smiles\": \"[C:8](=[O:9])([CH2:10][CH2:11][CH2:12][C@@H:13]([NH2:14])[C:15](=[O:16])[OH:17])[Cl:25]>>[C:8](=[O:9])([CH2:10][CH2:11][CH2:12][C@@H:13]([NH2:14])[C:15](=[O:16])[OH:17])[OH:18].[Cl:25][S:26]([Cl:27])=[O:28]\"\n              },\n              \"children\": [\n                {\n                  \"type\": \"mol\",\n                  \"hide\": false,\n                  \"smiles\": \"O=S(Cl)Cl\",\n                  \"is_chemical\": true,\n                  \"in_stock\": true\n                },\n                {\n                  \"type\": \"mol\",\n                  \"hide\": false,\n                  \"smiles\": \"N[C@H](CCCC(=O)O)C(=O)O\",\n                  \"is_chemical\": true,\n                  \"in_stock\": true\n                }\n              ]\n            }\n          ]\n        },\n        {\n          \"type\": \"mol\",\n          \"hide\": false,\n          \"smiles\": \"CC1(C)S[C@@H]2[C@H](N)C(=O)N2[C@H]1C(=O)O\",\n          \"is_chemical\": true,\n          \"in_stock\": true\n        }\n      ]\n    }\n  ]\n}"
+}
